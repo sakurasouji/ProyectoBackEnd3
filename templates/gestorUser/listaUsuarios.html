@@ -1,0 +1,77 @@
+{%extends "../baseAdmin.html" %}
+
+{%block title %}
+    Listado de Usuarios
+{%endblock%}
+
+{%block head%}    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+{%endblock%}
+
+{%block content%}
+<div class="alert alert-info display-3 text-center mt-5">Listado de Usuarios</div>
+{% if users %}
+<div class="table-responsive">
+    <table class="table" id="usuarios">
+        <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th>APELLIDO</th>
+                <th>NOMBRE DE USUARIO</th>
+                <th>EMAIL</th>
+                <th>PERMISOS DE ADMINISTRADOR</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>    
+                <td>{{user.first_name}}</td>
+                <td>{{user.last_name}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.is_superuser}}</td>
+                <td>
+                    <a href="/editUser/{{user.id}}" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal{{user.id}}"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+
+            <!-- Delete Modal-->
+            <div class="modal fade" id="deleteModal{{user.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModal"
+            aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">¿Estas seguro?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">¿Deseas eliminar el usuario?</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                            <a class="btn btn-danger" href="/delUser/{{user.id}}">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <h1>No hay usuarios en la base de datos</h1>
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready( function () {
+        $('#usuarios').DataTable();
+    } );
+</script>    
+
+{% endblock %}
+
+
